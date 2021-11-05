@@ -21,7 +21,9 @@ Route::group(['prefix' => 'admin'], function() {
 
 Route::group(['prefix' => 'admin'], function() {
     Route::get('profile/create', 'Admin\ProfileController@add')->middleware('auth');
+    Route::post('profile/create', 'Admin\ProfileController@create')->middleware('auth'); //PHP_Laravel14課題3
     Route::get('profile/edit', 'Admin\ProfileController@edit')->middleware('auth');
+    Route::post('profile/edit', 'Admin\ProfileController@update')->middleware('auth'); //PHP_Laravel14課題6
 });
 
 Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function() { //PHP_Laravel14追記

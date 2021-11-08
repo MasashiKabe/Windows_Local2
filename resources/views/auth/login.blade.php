@@ -8,7 +8,7 @@
                     <div class="login-header card-header mx-auto">{{ __('messages.Login') }}</div>
 
                     <div class="login-body card-body">
-                        <from method="POST" action="{{ route('login') }}">
+                        <form method="POST" action="{{ route('login') }}">
                             @csrf
 
                             <div class="from-group row">

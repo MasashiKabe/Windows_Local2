@@ -7,6 +7,9 @@ use App\Http\Controllers\Controller;
 
 //以下追記することでNews Modelが扱えるPHP_Laravel15
 use App\News;
+//PHP_Laravel18で追記
+use App\History;
+use Carbon\Carbon;
 
 class NewsController extends Controller
 {
@@ -78,12 +81,28 @@ class NewsController extends Controller
         $news = News::find($request->id);
         //送信されてきたフォームデータを格納する
         $news_form = $request->all();
-        unset($news_form['_token']);
+        if ($request->input('remove')) {
+            $news_form['image_path'] = null;
+        } elseif ($request->file('image')) {
+            $path = $request->file('image')->store('public/image');
+            $news_form['image_path'] = basename($path);
+        } else {
+            $news_form['image_path'] = $news->image_path;
+        }
 
+        unset($news_form['_token']);
+        unset($news_form['image']);
+        unset($news_form['remove']);
         //該当するデータを上書きして保存する
         $news->fill($news_form)->save();
 
-        return redirect('admin/news');
+        //PHP_Laravel18で追記
+        $history = new History();
+        $history->news_id = $news->id;
+        $history->edited_at = Carbon::now();
+        $history->save();
+
+        return redirect('admin/news/');
     }
 
     //PHP_Laravel17で以下追記

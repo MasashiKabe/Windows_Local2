@@ -37,6 +37,8 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function() {
     Route::get('news/delete', 'Admin\NewsController@delete'); //PHP_Laravel17追記
 });
 
+Route::get('/', 'NewsController@index');
+
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');

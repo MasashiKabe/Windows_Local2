@@ -10,6 +10,8 @@ use App\News;
 //PHP_Laravel18で追記
 use App\History;
 use Carbon\Carbon;
+//heroku画像アップロードで追加
+use Storage;
 
 class NewsController extends Controller
 {
@@ -31,8 +33,8 @@ class NewsController extends Controller
         $form = $request->all();
         //フォームから画像が送信されてきたら保存して、$news->image_pathに画像のパスを保存する
         if ($form['image']) {
-            $path = $request->file('image')->store('public/image');
-            $news->image_path = basename($path);
+            $path = Storage::disk('s3')->putfile('/',$form['image'],'public');
+            $news->image_path = Storage::disk('s3')->url($path);
         } else {
             $news->image_path = null;
         }
@@ -84,8 +86,8 @@ class NewsController extends Controller
         if ($request->input('remove')) {
             $news_form['image_path'] = null;
         } elseif ($request->file('image')) {
-            $path = $request->file('image')->store('public/image');
-            $news_form['image_path'] = basename($path);
+            $path = Storage::disk('s3')->putfile('/',$form['image'],'public');
+            $news_form['image_path'] = Storage::disk('s3')->url($path); 
         } else {
             $news_form['image_path'] = $news->image_path;
         }

@@ -86,7 +86,7 @@ class NewsController extends Controller
         if ($request->input('remove')) {
             $news_form['image_path'] = null;
         } elseif ($request->file('image')) {
-            $path = Storage::disk('s3')->putfile('/',$form['image'],'public');
+            $path = Storage::disk('s3')->putfile('/',$news_form['image'],'public');
             $news->image_path = Storage::disk('s3')->url($path); 
         } else {
             $news_form['image_path'] = $news->image_path;
